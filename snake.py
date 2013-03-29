@@ -1,4 +1,4 @@
-
+pos = [ (0,1,0), (1,0,1), (0,-1,2), (-1,0,3) ]
 
 
 
@@ -15,7 +15,12 @@ class World:
 		print(self.Barr)
 	
 	def add_barr(self,posx,posy):
-		self.Barr.append((posx,posy))
+		if self.Barr:
+			for i in self.Barr:
+				if (posx,posy) != i:
+					self.Barr.append((posx,posy))
+		else:
+			self.Barr.append((posx,posy))
 
 
 class Snake:
@@ -23,10 +28,19 @@ class Snake:
 		self.length = 1
 		self.posx = 0
 		self.posy = 0
-		self.canMove = [ 0, 1, 1, 0 ]
+		self.canMove = [ 0, 0, 0, 0 ]
+		self.check_canMove()
+		world.add_barr(self.posx,self.posy)
 
-	def check_canMove(self,world):
-		
+	def check_canMove(self):
+		for i in pos:
+			if self.posx+i[0]>=0 and self.posx+i[0]<=19 and self.posy+i[1]>=0 and self.posy+i[1]<=19:
+				self.canMove[i[2]] = 1
+			else:
+				self.canMove[i[2]] = 0
+	
+	def say_canmove(self):
+		print(self.canMove)
 
 	def AI_move(self,world):
 		if self.posx < 19:
@@ -41,14 +55,15 @@ class Snake:
 wo = World()
 wo.say_init()
 wo.add_barr(3,3)
+wo.add_barr(3,3)
 
 sn = Snake(wo)
-sn.AI_move(wo)
-sn.AI_move(wo)
+
 sn.say_pos()
 
 
 wo.tell_barr()
-
+sn.check_canMove()
+sn.say_canmove()
 
 
